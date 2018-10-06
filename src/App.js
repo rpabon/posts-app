@@ -1,11 +1,8 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import styles from './App.css';
 
 export class App extends Component {
-    render() {
-      return (
-        <div>
-          Mr. Poopy Butthole
-        </div>
-      )
-    }
+  render() {
+    return <div className={styles.app}>Mr. Poopy Butthole</div>;
+  }
 }
