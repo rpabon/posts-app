@@ -1,5 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { App } from './App';
+import { PostsList } from './PostsList/PostsList';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<PostsList />, document.getElementById('root'));
