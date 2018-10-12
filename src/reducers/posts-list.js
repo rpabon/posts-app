@@ -23,6 +23,10 @@ const pending = (state = initialState.pending, { type }) => {
     case POSTS_PENDING:
       return true;
 
+    case POSTS_SUCCESSFUL:
+    case POSTS_FAILURE:
+      return false;
+
     default:
       return state;
   }

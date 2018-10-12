@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getPosts } from '../actions';
 import { getPendingFromState, getPostsFromState } from '../reducers/posts-list';
+import { Link } from 'react-router-dom';
 
 class PostsList extends PureComponent {
   componentDidMount() {
@@ -12,7 +13,9 @@ class PostsList extends PureComponent {
   render() {
     return this.props.posts.map(({ id, title, body }) => (
       <div key={id}>
-        <h3>{title}</h3>
+        <Link to={`/post/${id}`}>
+          <h3>{title}</h3>
+        </Link>
         <p>{body}</p>
         <hr />
       </div>
