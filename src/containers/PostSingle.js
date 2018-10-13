@@ -7,6 +7,13 @@ import {
   getCommentsFromState,
   getPendingFromState as getCommentsPending
 } from '../reducers/comments';
+import Loadable from 'react-loadable';
+import Loading from '../components/Loading';
+
+const LoadableComments = Loadable({
+  loader: () => import('../components/Comments'),
+  loading: Loading
+});
 
 class Post extends PureComponent {
   componentDidMount() {
@@ -35,14 +42,7 @@ class Post extends PureComponent {
 
         <section>
           <h4>Comments</h4>
-          {comments.map(({ id, name, body, email }) => (
-            <div key={id}>
-              <p>
-                <b>{name} <small>{email}</small></b>
-              </p>
-              <p>{body}</p>
-            </div>
-          ))}
+          <LoadableComments comments={comments} />
         </section>
       </Fragment>
     );
