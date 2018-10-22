@@ -1,8 +1,8 @@
-const HtmlWebPackPlugin = require('html-webpack-plugin');
+const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-  entry: ['babel-regenerator-runtime', './src/index.js'],
+  entry: ['babel-regenerator-runtime', './src/client.js'],
   module: {
     rules: [
       {
@@ -36,11 +36,11 @@ module.exports = {
       }
     ]
   },
+  output: {
+    path: path.resolve(__dirname, '../dist'),
+    filename: '[name].js'
+  },
   plugins: [
-    new HtmlWebPackPlugin({
-      template: './src/index.html',
-      filename: './index.html'
-    }),
     new MiniCssExtractPlugin({
       filename: '[name].css',
       chunkFilename: '[id].css'

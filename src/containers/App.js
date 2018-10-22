@@ -1,13 +1,11 @@
 import React, { Fragment } from 'react';
-import { HashRouter as Router, Route } from 'react-router-dom';
-import PostsList from './PostsList';
-import PostSingle from './PostSingle';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { routes } from '../routes';
 
 export default () => (
-  <Router>
-    <Fragment>
-      <Route path="/" component={PostsList} exact />
-      <Route path="/post/:id" component={PostSingle} exact />
-    </Fragment>
-  </Router>
+  <Fragment>
+    {routes.map(({ path, component, exact }) => (
+      <Route key={path} component={component} exact={exact} />
+    ))}
+  </Fragment>
 );
