@@ -7,7 +7,11 @@ import { Link } from 'react-router-dom';
 
 class PostsList extends PureComponent {
   componentDidMount() {
-    this.props.getPosts();
+    const { posts, getPosts } = this.props;
+
+    if (posts.length === 0) {
+      getPosts();
+    }
   }
 
   render() {
@@ -22,6 +26,8 @@ class PostsList extends PureComponent {
     ));
   }
 }
+
+PostsList.serverFetch = getPosts;
 
 PostsList.propTypes = {
   posts: PropTypes.array.isRequired,

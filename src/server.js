@@ -5,11 +5,13 @@ import { renderToString } from 'react-dom/server';
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
-import { StaticRouter as Router } from 'react-router-dom';
+import { StaticRouter as Router, matchPath } from 'react-router-dom';
 import { rootReducer } from './reducers';
 import App from './containers/App';
+import { routes } from './routes';
+import { serverRenderingData as serverFetch } from './utils';
 
-const htmlTemplate = reactDOM => `
+const htmlTemplate = (reactDOM, reduxStore) => `
   <!DOCTYPE html>
   <html>
   <head>
@@ -20,6 +22,7 @@ const htmlTemplate = reactDOM => `
   </head>
   <body>
       <div id="root">${reactDOM}</div>
+      <script>window.__REDUX_STORE__ = ${JSON.stringify(reduxStore)}</script>
       <script src="/main.js"></script>
   </body>
   </html>
@@ -31,17 +34,23 @@ app.use(express.static(path.resolve(__dirname, '../dist')));
 
 app.get('/*', (req, res) => {
   const store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
+  const currentRoute = routes.find(route => matchPath(req.url, route)) || {};
 
-  const dom = renderToString(
-    <Provider store={store}>
-      <Router location={req.url} context={{}}>
-        <App />
-      </Router>
-    </Provider>
-  );
+  console.log(req.query);
 
-  res.writeHead(200, { 'Content-Type': 'text/html' });
-  res.end(htmlTemplate(dom));
+  store.dispatch(serverFetch(currentRoute)).then(() => {
+    const reactDOM = renderToString(
+      <Provider store={store}>
+        <Router location={req.url} context={{}}>
+          <App />
+        </Router>
+      </Provider>
+    );
+    const reduxStore = store.getState();
+
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    res.end(htmlTemplate(reactDOM, reduxStore));
+  });
 });
 
 app.listen(1337);

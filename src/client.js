@@ -10,6 +10,7 @@ import App from './containers/App';
 
 const store = createStore(
   rootReducer,
+  window.__REDUX_STORE__,
   applyMiddleware(thunkMiddleware, logger)
 );
 
