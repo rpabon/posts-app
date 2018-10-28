@@ -1,5 +1,5 @@
-import PostsList from "./containers/PostsList";
-import PostSingle from "./containers/PostSingle";
+import PostsList from './containers/PostsList';
+import PostSingle from './containers/PostSingle';
 
 export const routes = [
   {
@@ -9,7 +9,6 @@ export const routes = [
   },
   {
     path: '/post/:id',
-    component: PostSingle,
-    exact: true
+    component: PostSingle
   }
 ];

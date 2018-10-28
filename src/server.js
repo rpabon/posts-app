@@ -17,23 +17,20 @@ const htmlTemplate = reactDOM => `
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <title>Page Title</title>
       <meta name="viewport" content="width=device-width, initial-scale=1">
-      <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
   </head>
   <body>
       <div id="root">${reactDOM}</div>
-      <script src="./dist/main.js"></script>
+      <script src="/main.js"></script>
   </body>
   </html>
 `;
 
 const app = express();
 
-app.use(express.static(path.resolve(__dirname, './dist')));
+app.use(express.static(path.resolve(__dirname, '../dist')));
 
 app.get('/*', (req, res) => {
   const store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
-
-  console.log(req.url);
 
   const dom = renderToString(
     <Provider store={store}>

@@ -12,13 +12,13 @@ class PostsList extends PureComponent {
 
   render() {
     return this.props.posts.map(({ id, title, body }) => (
-      <div key={id}>
+      <article key={id}>
         <Link to={`/post/${id}`}>
           <h3>{title}</h3>
         </Link>
         <p>{body}</p>
         <hr />
-      </div>
+      </article>
     ));
   }
 }
