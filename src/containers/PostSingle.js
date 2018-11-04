@@ -18,6 +18,8 @@ const LoadableComments = Loadable({
 class Post extends PureComponent {
   componentDidMount() {
     const {
+      post,
+      comments,
       getPost,
       getComments,
       match: {
@@ -25,8 +27,13 @@ class Post extends PureComponent {
       }
     } = this.props;
 
-    getPost(id);
-    getComments(id);
+    if (!post.title) {
+      getPost(id);
+    }
+
+    if (comments.length === 0) {
+      getComments(id);
+    }
   }
 
   render() {
@@ -48,6 +55,12 @@ class Post extends PureComponent {
     );
   }
 }
+
+Post.serverFetch = (dispatch, url) => {
+  const id = url.replace('/post/', '');
+
+  return Promise.all([dispatch(getPost(id)), dispatch(getComments(id))]);
+};
 
 Post.propTypes = {
   post: PropTypes.object.isRequired,

@@ -27,7 +27,7 @@ class PostsList extends PureComponent {
   }
 }
 
-PostsList.serverFetch = getPosts;
+PostsList.serverFetch = dispatch => dispatch(getPosts());
 
 PostsList.propTypes = {
   posts: PropTypes.array.isRequired,

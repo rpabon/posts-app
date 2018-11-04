@@ -33,15 +33,18 @@ const app = express();
 app.use(express.static(path.resolve(__dirname, '../dist')));
 
 app.get('/*', (req, res) => {
+  const { url } = req;
   const store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
-  const currentRoute = routes.find(route => matchPath(req.url, route)) || {};
+  const storeActions = routes
+    .filter(route => matchPath(url, route))
+    .map(route => route.component)
+    .filter(component => component.serverFetch)
+    .map(({ serverFetch }) => serverFetch(store.dispatch, url));
 
-  console.log(req.query);
-
-  store.dispatch(serverFetch(currentRoute)).then(() => {
+  Promise.all(storeActions).then(() => {
     const reactDOM = renderToString(
       <Provider store={store}>
-        <Router location={req.url} context={{}}>
+        <Router location={url} context={{}}>
           <App />
         </Router>
       </Provider>
