@@ -9,7 +9,6 @@ import { StaticRouter as Router, matchPath } from 'react-router-dom';
 import { rootReducer } from './reducers';
 import App from './containers/App';
 import { routes } from './routes';
-import { serverRenderingData as serverFetch } from './utils';
 
 const htmlTemplate = (reactDOM, reduxStore) => `
   <!DOCTYPE html>

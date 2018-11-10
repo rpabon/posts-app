@@ -2,11 +2,11 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-  entry: ['babel-regenerator-runtime', './src/client.js'],
+  entry: ['babel-regenerator-runtime', './src/client.tsx'],
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(ts|js)x?$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader'
@@ -35,6 +35,9 @@ module.exports = {
         ]
       }
     ]
+  },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js']
   },
   output: {
     path: path.resolve(__dirname, '../dist'),
