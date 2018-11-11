@@ -3,16 +3,18 @@ import {
   COMMENTS_PENDING,
   COMMENTS_SUCCESSFUL
 } from '../constants';
+import { CommentsState, CommentsAction } from '../interfaces';
 
-const initialState = [
-  {
-    comments: [],
-    pending: false,
-    error: null
-  }
-];
+const initialState: CommentsState = {
+  comments: [],
+  pending: false,
+  error: null,
+};
 
-const comments = (state = initialState.comments, { type, payload }) => {
+const comments = (
+  state = initialState.comments,
+  { type, payload }: CommentsAction
+) => {
   switch (type) {
     case COMMENTS_SUCCESSFUL:
       return payload;
@@ -26,7 +28,7 @@ const comments = (state = initialState.comments, { type, payload }) => {
   }
 };
 
-const pending = (state = initialState.pending, { type }) => {
+const pending = (state = initialState.pending, { type }: CommentsAction) => {
   switch (type) {
     case COMMENTS_PENDING:
       return true;
@@ -40,10 +42,13 @@ const pending = (state = initialState.pending, { type }) => {
   }
 };
 
-const error = (state = initialState.error, { type, error }) => {
+const error = (
+  state = initialState.error,
+  { type, payload }: CommentsAction
+) => {
   switch (type) {
     case COMMENTS_FAILURE:
-      return error;
+      return payload;
 
     case COMMENTS_PENDING:
     case COMMENTS_SUCCESSFUL:
@@ -57,8 +62,8 @@ const error = (state = initialState.error, { type, error }) => {
 export const getCommentsFromState = state => state.commentList.comments;
 export const getPendingFromState = state => state.commentList.pending;
 
-export const commentList = (state = initialState, action) => ({
+export const commentList = (state = initialState, action: CommentsAction) => ({
   comments: comments(state.comments, action),
   pending: pending(state.pending, action),
-  error: error(state.error, action)
+  error: error(state.error, action),
 });

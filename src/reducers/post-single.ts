@@ -1,19 +1,21 @@
 import { POST_FAILURE, POST_PENDING, POST_SUCCESSFUL } from '../constants';
+import { SinglePostState, SinglePostAction, AppState } from '../interfaces';
 
-const initialState = [
-  {
-    post: {
-      userId: 0,
-      id: 0,
-      title: '',
-      body: ''
-    },
-    pending: false,
-    error: null
-  }
-];
+const initialState: SinglePostState = {
+  post: {
+    userId: 0,
+    id: 0,
+    title: '',
+    body: '',
+  },
+  pending: false,
+  error: null,
+};
 
-const post = (state = initialState.post, { type, payload }) => {
+const post = (
+  state = initialState.post,
+  { type, payload }: SinglePostAction
+) => {
   switch (type) {
     case POST_SUCCESSFUL:
       return payload;
@@ -27,7 +29,7 @@ const post = (state = initialState.post, { type, payload }) => {
   }
 };
 
-const pending = (state = initialState.pending, { type }) => {
+const pending = (state = initialState.pending, { type }: SinglePostAction) => {
   switch (type) {
     case POST_PENDING:
       return true;
@@ -41,10 +43,13 @@ const pending = (state = initialState.pending, { type }) => {
   }
 };
 
-const error = (state = initialState.error, { type, error }) => {
+const error = (
+  state = initialState.error,
+  { type, payload }: SinglePostAction
+) => {
   switch (type) {
     case POST_FAILURE:
-      return error;
+      return payload;
 
     case POST_PENDING:
     case POST_SUCCESSFUL:
@@ -55,11 +60,12 @@ const error = (state = initialState.error, { type, error }) => {
   }
 };
 
-export const getPostFromState = state => state.postSingle.post;
-export const getPendingFromState = state => state.postSingle.pending;
+export const getPostFromState = (state: AppState) => state.postSingle.post;
+export const getPendingFromState = (state: AppState) =>
+  state.postSingle.pending;
 
-export const postSingle = (state = initialState, action) => ({
+export const postSingle = (state = initialState, action: SinglePostAction) => ({
   post: post(state.post, action),
   pending: pending(state.pending, action),
-  error: error(state.error, action)
+  error: error(state.error, action),
 });

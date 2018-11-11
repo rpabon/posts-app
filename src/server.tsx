@@ -38,7 +38,7 @@ app.get('/*', (req, res) => {
     .filter(route => matchPath(url, route))
     .map(route => route.component)
     .filter(component => component.serverFetch)
-    .map(({ serverFetch }) => serverFetch(store.dispatch, url));
+    .map(({ serverFetch }) => serverFetch(url));
 
   Promise.all(storeActions).then(() => {
     const reactDOM = renderToString(

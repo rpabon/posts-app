@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { Dispatch } from 'redux';
+import { SinglePostType, AppState } from '../interfaces';
 import {
   API_BASE_URL,
   POSTS_FAILURE,
@@ -9,10 +11,10 @@ import {
   POST_SUCCESSFUL,
   COMMENTS_FAILURE,
   COMMENTS_PENDING,
-  COMMENTS_SUCCESSFUL,
+  COMMENTS_SUCCESSFUL
 } from '../constants';
 
-export const getPosts = () => dispatch => {
+export const getPosts = () => (dispatch: Dispatch) => {
   dispatch({ type: POSTS_PENDING });
 
   return axios
@@ -23,9 +25,12 @@ export const getPosts = () => dispatch => {
     .catch(error => dispatch({ type: POSTS_FAILURE, payload: error }));
 };
 
-export const getPost = id => (dispatch, getState) => {
+export const getPost = (id: number) => (
+  dispatch: Dispatch,
+  getState: () => AppState
+) => {
   const { postsList: { posts } } = getState();
-  const post = Array.isArray(posts) && posts.find(post => post.id == id);
+  const post = posts.find((p: SinglePostType) => p.id === id);
 
   dispatch({ type: POST_PENDING });
 
@@ -34,14 +39,12 @@ export const getPost = id => (dispatch, getState) => {
   } else {
     return axios
       .get(`${API_BASE_URL}/posts/${id}`)
-      .then(({ data: post }) =>
-        dispatch({ type: POST_SUCCESSFUL, payload: post })
-      )
+      .then(({ data }) => dispatch({ type: POST_SUCCESSFUL, payload: data }))
       .catch(error => dispatch({ type: POST_FAILURE, payload: error }));
   }
 };
 
-export const getComments = postId => dispatch => {
+export const getComments = (postId: number) => (dispatch: Dispatch) => {
   dispatch({ type: COMMENTS_PENDING });
 
   return axios

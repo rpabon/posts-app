@@ -16,12 +16,15 @@ const LoadableComments = Loadable({
 });
 
 class Post extends PureComponent {
+  static serverFetch(url: string) {
+    const id = Number(url.replace('/post/', ''));
+    return [getPost(id), getComments(id)];
+  }
+
   componentDidMount() {
     const {
       post,
       comments,
-      getPost,
-      getComments,
       match: {
         params: { id }
       }
@@ -55,12 +58,6 @@ class Post extends PureComponent {
     );
   }
 }
-
-Post.serverFetch = (dispatch, url) => {
-  const id = url.replace('/post/', '');
-
-  return Promise.all([dispatch(getPost(id)), dispatch(getComments(id))]);
-};
 
 Post.propTypes = {
   post: PropTypes.object.isRequired,

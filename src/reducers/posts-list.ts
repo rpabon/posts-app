@@ -1,14 +1,16 @@
 import { POSTS_PENDING, POSTS_SUCCESSFUL, POSTS_FAILURE } from '../constants';
+import { PostsListState, PostsListAction, AppState } from '../interfaces';
 
-const initialState = [
-  {
-    posts: [],
-    pending: false,
-    error: null
-  }
-];
+const initialState: PostsListState = {
+  posts: [],
+  pending: false,
+  error: null,
+};
 
-const posts = (state = initialState.posts, { type, payload }) => {
+const posts = (
+  state = initialState.posts,
+  { type, payload }: PostsListAction
+) => {
   switch (type) {
     case POSTS_SUCCESSFUL:
       return payload;
@@ -18,7 +20,7 @@ const posts = (state = initialState.posts, { type, payload }) => {
   }
 };
 
-const pending = (state = initialState.pending, { type }) => {
+const pending = (state = initialState.pending, { type }: PostsListAction) => {
   switch (type) {
     case POSTS_PENDING:
       return true;
@@ -32,21 +34,24 @@ const pending = (state = initialState.pending, { type }) => {
   }
 };
 
-const error = (state = initialState.error, { type, error }) => {
+const error = (
+  state = initialState.error,
+  { type, payload }: PostsListAction
+) => {
   switch (type) {
     case POSTS_FAILURE:
-      return error;
+      return payload;
 
     default:
       return state;
   }
 };
 
-export const getPostsFromState = state => state.postsList.posts;
-export const getPendingFromState = state => state.postsList.pending;
+export const getPostsFromState = (state: AppState) => state.postsList.posts;
+export const getPendingFromState = (state: AppState) => state.postsList.pending;
 
-export const postsList = (state = initialState, action) => ({
+export const postsList = (state = initialState, action: PostsListAction) => ({
   posts: posts(state.posts, action),
   pending: pending(state.pending, action),
-  error: error(state.error, action)
+  error: error(state.error, action),
 });

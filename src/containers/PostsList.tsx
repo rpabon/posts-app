@@ -1,17 +1,21 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getPosts } from '../actions';
 import { getPendingFromState, getPostsFromState } from '../reducers/posts-list';
 import { Link } from 'react-router-dom';
+import { PostsListState, PostsListProps } from '../interfaces';
 
-class PostsList extends PureComponent {
+class PostsList extends PureComponent<PostsListProps> {
+  static serverFetch() {
+    return [getPosts()];
+  }
+
   componentDidMount() {
-    const { posts, getPosts } = this.props;
+    const { posts } = this.props;
 
-    if (posts.length === 0) {
-      getPosts();
-    }
+    // if (posts.length === 0) {
+    //   getPosts();
+    // }
   }
 
   render() {
@@ -27,21 +31,9 @@ class PostsList extends PureComponent {
   }
 }
 
-PostsList.serverFetch = dispatch => dispatch(getPosts());
-
-PostsList.propTypes = {
-  posts: PropTypes.array.isRequired,
-  pending: PropTypes.bool.isRequired
-};
-
-PostsList.defaultProps = {
-  posts: [],
-  pending: false
-};
-
-const mapStateToProps = state => ({
+const mapStateToProps = (state: PostsListState) => ({
   posts: getPostsFromState(state),
-  pending: getPendingFromState(state)
+  pending: getPendingFromState(state),
 });
 
 export default connect(
